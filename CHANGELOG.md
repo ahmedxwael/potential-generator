@@ -1,9 +1,8 @@
-# Change Log
+# Release Notes
 
-All notable changes to the "potential-generator" extension will be documented in this file.
+## 0.0.1
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
-
-## [Unreleased]
-
-- Initial release
+- Initial release of the React Component Generator extension.
+  - Generate React functional components.
+  - Select target folders for generated files.
+  - Automatically format files using Prettier.

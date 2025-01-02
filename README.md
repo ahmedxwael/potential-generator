@@ -1,71 +1,105 @@
-# potential-generator README
+# React Component Generator
 
-This is the README for your extension "potential-generator". After writing up a brief description, we recommend including the following sections.
-
-## Features
-
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
-
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
-
-## Requirements
-
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
-
-## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
+This VS Code extension allows you to quickly generate React functional components with TypeScript. The extension is designed to streamline your workflow by automating the creation and formatting of components.
 
 ---
 
-## Following extension guidelines
+## Features
 
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
+- **Create React Functional Components**:
+  - Generates a React functional component with TypeScript interfaces.
+  - Automatically formats the code using Prettier.
 
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
+- **Folder Selection**:
+  - Allows you to select the destination folder for the generated component.
 
-## Working with Markdown
+- **Customizable Templates** (Planned):
+  - Future updates may include the ability to customize component templates.
 
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
+---
 
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
+## Installation
 
-## For more information
+1. Clone the repository:
 
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+   ```bash
+   git clone <repository-url>
+   ```
 
-**Enjoy!**
+2. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+3. Package the extension:
+
+   ```bash
+   vsce package
+   ```
+
+4. Install the `.vsix` file:
+
+   ```bash
+   code --install-extension <file-name>.vsix
+   ```
+
+---
+
+## Usage
+
+1. Open the command palette (`Ctrl+Shift+P` or `Cmd+Shift+P` on macOS).
+2. Type `Create React Component` and select the command.
+3. Enter the name of the component.
+4. Select the folder where you want to save the component.
+5. The extension will generate a `.tsx` file with a preformatted React functional component.
+
+---
+
+## Requirements
+
+- Visual Studio Code (latest version recommended)
+- Node.js
+
+---
+
+## Extension Settings
+
+This extension does not have configurable settings yet.
+
+---
+
+## Known Issues
+
+- None reported.
+
+---
+
+## Contributing
+
+1. Fork the repository.
+2. Create a new branch:
+
+   ```bash
+   git checkout -b feature/your-feature
+   ```
+
+3. Commit your changes:
+
+   ```bash
+   git commit -m "Add your feature"
+   ```
+
+4. Push to the branch:
+
+   ```bash
+   git push origin feature/your-feature
+   ```
+
+5. Create a pull request.
+
+---
+
+## License
+
+[MIT License](LICENSE)
