@@ -14,8 +14,7 @@ export async function nextPageTemplate(componentName: string) {
     import type { Metadata } from "next"
 
     type ${compPascalCaseName}Props = {
-      params: {};
-      searchParams: { [key: string]: string | string[] | undefined };
+      // Add your props here
     }
 
     export const metadata: Metadata = {
@@ -23,10 +22,7 @@ export async function nextPageTemplate(componentName: string) {
       description: "This is the ${compTitleCaseName} page",
     };
 
-    export default function ${compPascalCaseName}({
-      params,
-      searchParams,
-    }: ${compPascalCaseName}Props) {
+    export default function ${compPascalCaseName}(props: ${compPascalCaseName}Props) {
       return (
         <section className="">
           <h1>${compPascalCaseName}</h1>

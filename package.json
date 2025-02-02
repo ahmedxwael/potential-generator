@@ -1,6 +1,6 @@
 {
   "name": "potential-generator",
-  "displayName": "\"Potential Generator\"",
+  "displayName": "Potential Generator",
   "description": "A VS Code extension for generating React, Next.js, Remix components and pages.",
   "version": "1.0.0",
   "repository": {
