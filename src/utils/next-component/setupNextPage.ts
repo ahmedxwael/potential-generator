@@ -1,5 +1,5 @@
-import { GENERATE_NEXT_PAGE } from "@src/commands";
 import * as vscode from "vscode";
+import { GENERATE_NEXT_PAGE } from "../../commands";
 import { StringFormatConvention } from "../changeStringFormat";
 import { determineFolderPath, getFileOrFolderName } from "../files-and-folders";
 import { getComponentConfig } from "../getComponentConfig";
@@ -49,6 +49,11 @@ export async function setupNextPage(context: vscode.ExtensionContext) {
           nextPage: true,
           ...pageConfig,
         });
+
+        // Show a success message to the user
+        vscode.window.showInformationMessage(
+          "Successfully generated your Next.js page."
+        );
       } catch (error) {
         vscode.window.showErrorMessage(
           `Error generating Next.js component: ${error}`

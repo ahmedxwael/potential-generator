@@ -1,5 +1,5 @@
-import { GENERATE_NEXT_COMPONENT } from "@src/commands";
 import * as vscode from "vscode";
+import { GENERATE_NEXT_COMPONENT } from "../../commands";
 import { StringFormatConvention } from "../changeStringFormat";
 import { determineFolderPath, getFileOrFolderName } from "../files-and-folders";
 import { getComponentConfig } from "../getComponentConfig";
@@ -64,6 +64,11 @@ export function setupNextComponent(context: vscode.ExtensionContext) {
           targetFolderPath,
           ...compConfig,
         });
+
+        // Show a success message to the user
+        vscode.window.showInformationMessage(
+          "Successfully generated your Next.js component."
+        );
       } catch (error) {
         // Show an error message if the component creation fails
         vscode.window.showErrorMessage(`Error: ${error}`);

@@ -9,9 +9,5 @@
 		"sourceMap": true,
 		"rootDir": "src",
 		"strict": true,
-		"baseUrl": ".",
-		"paths": {
-			"@src/*": ["src/*"]
-		}
 	}
 }

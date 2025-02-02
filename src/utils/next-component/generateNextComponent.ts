@@ -1,11 +1,11 @@
+import * as path from "path";
 import {
   indexFileFormattedTemplate,
   indexFileName,
   nextPageFileName,
   reactCompFileName,
-} from "@src/consts";
-import { nextCompTemplate, nextPageTemplate } from "@src/templates/next";
-import * as path from "path";
+} from "../../consts";
+import { nextCompTemplate, nextPageTemplate } from "../../templates/next";
 import {
   StringFormatConvention,
   changeStringConvention,
@@ -32,9 +32,7 @@ export async function generateNextComponent({
   nextPage = false,
 }: NextCompConfig) {
   try {
-    const compNewName = nextPage
-      ? nextPageFileName
-      : changeStringConvention(componentName, namingConvention);
+    const compNewName = changeStringConvention(componentName, namingConvention);
     const compFileName = reactCompFileName(compNewName);
     const template = nextPage
       ? await nextPageTemplate(componentName)
@@ -46,7 +44,7 @@ export async function generateNextComponent({
     if (nextPage) {
       // Create next page folder and component file.
       const pageFolderPath = path.join(targetFolderPath, compNewName);
-      await createFile(pageFolderPath, compFileName, template);
+      await createFile(pageFolderPath, nextPageFileName, template);
     } else if (withIndexFile) {
       // Create next component with index file.
       const compFolderPath = path.join(targetFolderPath, compNewName);

@@ -71,6 +71,11 @@ export async function setupRemixRoute(context: vscode.ExtensionContext) {
         route: true,
         ...remixCompConfig,
       });
+
+      // Show a success message to the user
+      vscode.window.showInformationMessage(
+        `Successfully generated your Remix route.`
+      );
     }
   );
 

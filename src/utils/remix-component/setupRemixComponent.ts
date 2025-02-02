@@ -80,6 +80,11 @@ export function setupRemixComponent(context: vscode.ExtensionContext) {
         targetFolderPath,
         ...remixCompConfig,
       });
+
+      // Show a success message to the user
+      vscode.window.showInformationMessage(
+        "Successfully generated your Remix component."
+      );
     }
   );
 

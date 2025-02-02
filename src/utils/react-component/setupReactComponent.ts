@@ -3,8 +3,8 @@
  * @module setupReactComponent
  */
 
-import { GENERATE_REACT_COMPONENT } from "@src/commands";
 import * as vscode from "vscode";
+import { GENERATE_REACT_COMPONENT } from "../../commands";
 import { StringFormatConvention } from "../changeStringFormat";
 import { determineFolderPath, getFileOrFolderName } from "../files-and-folders";
 import { getComponentConfig } from "../getComponentConfig";
@@ -81,7 +81,7 @@ export function setupReactComponent(context: vscode.ExtensionContext) {
 
         // Show a success message to the user
         vscode.window.showInformationMessage(
-          `Component ${componentName} created successfully!`
+          "Successfully generated your  React component."
         );
       } catch (error) {
         // Show an error message if the component creation fails

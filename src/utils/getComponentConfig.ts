@@ -1,8 +1,8 @@
 /**
  * This module handles component configuration and preferences for the VS Code extension.
  */
-import { EXTENSION_NAME } from "@src/commands";
 import * as vscode from "vscode";
+import { EXTENSION_NAME } from "../commands";
 import { StringFormatConvention } from "./changeStringFormat";
 
 /**

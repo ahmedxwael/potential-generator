@@ -3,9 +3,9 @@
  * @module generateReactComponentFiles
  */
 
-import { indexFileFormattedTemplate, indexFileName } from "@src/consts";
-import { basicReactCompTemplate } from "@src/templates/react";
 import * as path from "path";
+import { indexFileFormattedTemplate, indexFileName } from "../../consts";
+import { basicReactCompTemplate } from "../../templates/react";
 import {
   StringFormatConvention,
   changeStringConvention,

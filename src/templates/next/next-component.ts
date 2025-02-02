@@ -1,4 +1,4 @@
-import { generateFormattedCode } from "@src/utils";
+import { generateFormattedCode } from "../../utils";
 import { basicReactCompTemplate } from "../react";
 
 export async function nextCompTemplate(

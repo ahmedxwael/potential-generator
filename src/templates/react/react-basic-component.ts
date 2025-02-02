@@ -1,4 +1,4 @@
-import { changeStringConvention, generateFormattedCode } from "@src/utils";
+import { changeStringConvention, generateFormattedCode } from "../../utils";
 
 export function basicReactCompTemplate(
   componentName: string,
