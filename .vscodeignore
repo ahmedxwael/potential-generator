@@ -1,6 +1,6 @@
+# Exclude unnecessary files and directories
 .vscode/**
 .vscode-test/**
-src/**
 .gitignore
 .yarnrc
 vsc-extension-quickstart.md
@@ -8,5 +8,6 @@ vsc-extension-quickstart.md
 **/eslint.config.mjs
 **/*.map
 **/*.ts
-**/.vscode-test.*
-!src/assets/*
+
+# Include the src/assets directory
+!src/assets/**
