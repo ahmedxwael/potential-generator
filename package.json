@@ -1,8 +1,20 @@
 {
   "name": "potential-generator",
   "displayName": "\"Potential Generator\"",
-  "description": "A VS Code extension for generating React and next functional components and more.",
-  "version": "0.0.1",
+  "description": "A VS Code extension for generating React, Next.js, Remix components and more.",
+  "version": "1.0.0",
+  "icon": "./src/assets/potential-generator-logo.png",
+  "keywords": [
+    "react",
+    "next.js",
+    "remix",
+    "typescript",
+    "component generator",
+    "vscode",
+    "vscode-extension"
+  ],
+  "author": "Ahmed Wael",
+  "license": "MIT",
   "engines": {
     "vscode": "^1.96.0"
   },
@@ -11,21 +23,89 @@
   ],
   "activationEvents": [],
   "main": "./out/extension.js",
-  "contributes": {
-    "commands": [
-      {
-        "command": "potential-generator.createReactComponent",
-        "title": "Create react component"
-      }
-    ]
-  },
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
-    "lint": "eslint src",
-    "test": "vscode-test"
+    "test": "vscode-test",
+    "lint": "eslint src --ext ts"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "potential-generator.generateReactComponent",
+        "title": "Generate React Component",
+        "icon": {
+          "dark": "./src/assets/icons/react-component-icon.png",
+          "light": "./src/assets/icons/react-component-icon.png"
+        }
+      },
+      {
+        "command": "potential-generator.generateNextComponent",
+        "title": "Generate Next.js Component"
+      },
+      {
+        "command": "potential-generator.generateNextPage",
+        "title": "Generate Next.js Page"
+      },
+      {
+        "command": "potential-generator.generateRemixComponent",
+        "title": "Generate Remix Component"
+      },
+      {
+        "command": "potential-generator.generateRemixRoute",
+        "title": "Generate Remix Route"
+      }
+    ],
+    "submenus": [
+      {
+        "id": "nextjsSubmenu",
+        "label": "Next.js"
+      },
+      {
+        "id": "remixjsSubmenu",
+        "label": "Remix.js"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "potential-generator.generateReactComponent",
+          "group": "1_modification"
+        },
+        {
+          "submenu": "nextjsSubmenu",
+          "group": "1_modification",
+          "when": "explorerResourceIsFolder"
+        },
+        {
+          "submenu": "remixjsSubmenu",
+          "group": "1_modification",
+          "when": "explorerResourceIsFolder" 
+        }
+      ],
+      "nextjsSubmenu": [
+        {
+          "command": "potential-generator.generateNextComponent",
+          "group": "1_modification"
+        },
+        {
+          "command": "potential-generator.generateNextPage",
+          "group": "1_modification"
+        }
+      ],
+      "remixjsSubmenu": [
+        {
+          "command": "potential-generator.generateRemixComponent",
+          "group": "1_modification"
+        },
+        {
+          "command": "potential-generator.generateRemixRoute",
+          "group": "1_modification"
+        }
+      ]
+    }
   },
   "devDependencies": {
     "@types/mocha": "^10.0.10",
