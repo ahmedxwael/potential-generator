@@ -1,15 +1,20 @@
 {
   "name": "potential-generator",
   "displayName": "\"Potential Generator\"",
-  "description": "A VS Code extension for generating React, Next.js, Remix components and more.",
+  "description": "A VS Code extension for generating React, Next.js, Remix components and pages.",
   "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ahmedxwael/potential-generator"
+  },
+  "publisher": "ahmedxwael",
   "icon": "./src/assets/potential-generator-logo.png",
   "keywords": [
     "react",
     "next.js",
     "remix",
     "typescript",
-    "component generator",
+    "component-generator",
     "vscode",
     "vscode-extension"
   ],
