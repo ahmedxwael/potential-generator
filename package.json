@@ -8,7 +8,7 @@
     "url": "https://github.com/ahmedxwael/potential-generator"
   },
   "publisher": "ahmedxwael",
-  "icon": "./src/assets/potential-generator-logo.png",
+  "icon": "src/assets/potential-generator-logo.png",
   "keywords": [
     "react",
     "next.js",
@@ -40,11 +40,7 @@
     "commands": [
       {
         "command": "potential-generator.generateReactComponent",
-        "title": "Generate React Component",
-        "icon": {
-          "dark": "./src/assets/icons/react-component-icon.png",
-          "light": "./src/assets/icons/react-component-icon.png"
-        }
+        "title": "Generate React Component"
       },
       {
         "command": "potential-generator.generateNextComponent",
