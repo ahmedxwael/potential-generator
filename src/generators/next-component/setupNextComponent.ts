@@ -1,31 +1,41 @@
 import * as vscode from "vscode";
 import { GENERATE_NEXT_COMPONENT } from "../../commands";
-import { StringFormatConvention } from "../changeStringFormat";
-import { determineFolderPath, getFileOrFolderName } from "../files-and-folders";
-import { getComponentConfig } from "../getComponentConfig";
+import { isFilesOrFoldersExists } from "../../utils";
+import { changeStringConvention } from "../../utils/changeStringFormat";
+import {
+  determineFolderPath,
+  getFileOrFolderName,
+} from "../../utils/files-and-folders";
+import {
+  getComponentNamingConvention,
+  getComponentPreferences,
+  QuickPickOption,
+} from "../../utils/getComponentConfig";
 import { generateNextComponent } from "./generateNextComponent";
 
-const componentConfigList = [
+const preferencesList: QuickPickOption[] = [
+  {
+    label: "withProps",
+    description: "Next.js Component With Props",
+    picked: true,
+  },
+  {
+    label: "withState",
+    description: "Next.js Component With State",
+  },
   {
     label: "clientComponent",
-    description: "Client component",
+    description: "Next.js Client Component",
+  },
+  {
+    label: "exportAsDefault",
+    description: "Export Component With Default Export",
   },
   {
     label: "withIndexFile",
-    description: "With index file",
-  },
-  {
-    label: "withProps",
-    description: "With props",
+    description: "Include Index File For The Component",
   },
 ];
-
-type NextComponentPreferences = {
-  namingConvention: StringFormatConvention;
-  clientComponent: boolean;
-  withIndexFile: boolean;
-  withProps: boolean;
-};
 
 export function setupNextComponent(context: vscode.ExtensionContext) {
   let disposable = vscode.commands.registerCommand(
@@ -49,20 +59,38 @@ export function setupNextComponent(context: vscode.ExtensionContext) {
         }
 
         // Get the user's component configuration settings
-        const compConfig =
-          await getComponentConfig<NextComponentPreferences>(
-            componentConfigList
-          );
-
-        if (!compConfig) {
+        const namingConvention = await getComponentNamingConvention();
+        if (!namingConvention) {
+          vscode.window.showErrorMessage("No naming convention selected.");
           return;
+        }
+        const componentNewName = changeStringConvention(
+          componentName,
+          namingConvention
+        );
+
+        // Check if the folder or file already exists
+        const exists = isFilesOrFoldersExists(
+          targetFolderPath,
+          componentNewName
+        );
+        if (exists) {
+          return;
+        }
+
+        const preferencesObject =
+          await getComponentPreferences(preferencesList);
+        if (!preferencesObject) {
+          vscode.window.showErrorMessage("No Preferences Selected.");
+          return; // Added missing return statement
         }
 
         // Create the Next.js component with the specified settings
         await generateNextComponent({
           componentName,
           targetFolderPath,
-          ...compConfig,
+          namingConvention,
+          options: preferencesObject,
         });
 
         // Show a success message to the user

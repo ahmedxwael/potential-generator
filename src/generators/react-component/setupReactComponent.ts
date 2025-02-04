@@ -5,35 +5,41 @@
 
 import * as vscode from "vscode";
 import { GENERATE_REACT_COMPONENT } from "../../commands";
-import { StringFormatConvention } from "../changeStringFormat";
-import { determineFolderPath, getFileOrFolderName } from "../files-and-folders";
-import { getComponentConfig } from "../getComponentConfig";
+import { changeStringConvention, isFilesOrFoldersExists } from "../../utils";
+import {
+  determineFolderPath,
+  getFileOrFolderName,
+} from "../../utils/files-and-folders";
+import {
+  getComponentNamingConvention,
+  getComponentPreferences,
+  QuickPickOption,
+} from "../../utils/getComponentConfig";
 import { generateReactComponentFiles } from "./generateReactComponentFiles";
-
-/**
- * Configuration options for React component generation
- * @typedef {Object} ReactComponentPreferences
- * @property {StringFormatConvention} namingConvention - The naming convention to use for the component
- * @property {boolean} withIndexFile - Whether to generate an index file
- * @property {boolean} withProps - Whether to include props interface
- */
-type ReactComponentPreferences = {
-  namingConvention: StringFormatConvention;
-  withIndexFile: boolean;
-  withProps: boolean;
-};
 
 /**
  * List of available component preferences that can be configured by the user
  */
-const compPreferencesList = [
-  {
-    label: "withIndexFile",
-    description: "With index file",
-  },
+const compPreferencesList: QuickPickOption[] = [
   {
     label: "withProps",
-    description: "With props",
+    description: "Include Props To The Component",
+    picked: true,
+  },
+  {
+    label: "withState",
+    description: "Include State To The Component",
+    picked: false,
+  },
+  {
+    label: "exportAsDefault",
+    description: "Export Component With Default Export",
+    picked: false,
+  },
+  {
+    label: "withIndexFile",
+    description: "Include Index File For The Component",
+    picked: false,
   },
 ];
 
@@ -64,19 +70,34 @@ export function setupReactComponent(context: vscode.ExtensionContext) {
         }
 
         // Get the user's component configuration settings
-        const componentConfig =
-          await getComponentConfig<ReactComponentPreferences>(
-            compPreferencesList
-          );
-        if (!componentConfig) {
+        const namingConvention = await getComponentNamingConvention();
+        if (!namingConvention) {
+          vscode.window.showErrorMessage("No naming convention selected.");
           return;
+        }
+
+        // Check if the folder or file already exists
+        const exists = isFilesOrFoldersExists(
+          targetFolderPath,
+          changeStringConvention(componentName, namingConvention)
+        );
+        if (exists) {
+          return;
+        }
+
+        const preferencesObject =
+          await getComponentPreferences(compPreferencesList);
+        if (!preferencesObject) {
+          vscode.window.showErrorMessage("No Preferences Selected.");
+          return; // Added missing return statement
         }
 
         // Create the React component with the specified settings
         await generateReactComponentFiles({
           componentName,
           targetFolderPath,
-          ...componentConfig,
+          namingConvention,
+          options: preferencesObject,
         });
 
         // Show a success message to the user

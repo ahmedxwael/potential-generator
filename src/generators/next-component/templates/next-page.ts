@@ -1,4 +1,4 @@
-import { changeStringConvention, generateFormattedCode } from "../../utils";
+import { changeStringConvention, generateFormattedCode } from "../../../utils";
 
 export async function nextPageTemplate(componentName: string) {
   const compPascalCaseName = changeStringConvention(

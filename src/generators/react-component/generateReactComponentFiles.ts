@@ -4,61 +4,57 @@
  */
 
 import * as path from "path";
-import { indexFileFormattedTemplate, indexFileName } from "../../consts";
-import { basicReactCompTemplate } from "../../templates/react";
+import { indexFileName, indexFileTemplate } from "../../consts";
 import {
   StringFormatConvention,
   changeStringConvention,
-} from "../changeStringFormat";
-import { createFile } from "../files-and-folders";
-import { generateFormattedCode } from "../generateFormattedCode";
+} from "../../utils/changeStringFormat";
+import { createFile } from "../../utils/files-and-folders";
+import { generateFormattedCode } from "../../utils/generateFormattedCode";
+import { basicReactCompTemplate } from "./templates/basic-react-component";
+import { ReactComponentOptions } from "./types";
 
 /**
  * Configuration options for generating React component files
- * @typedef {Object} generateReactComponentProps
+ * @typedef {Object} GenerateReactComponent
+ * @property {string} targetFolderPath - The directory path where the component files will be created
  * @property {string} componentName - The name of the React component to generate
  * @property {StringFormatConvention} namingConvention - The naming convention to use for the component files
- * @property {boolean} withIndexFile - Whether to generate an index.ts file
- * @property {string} targetFolderPath - The directory path where the component files will be created
- * @property {boolean} withProps - Whether to include Props interface in the component
+ * @property {ReactComponentOptions} options - Additional options for the React component generation
  */
-type generateReactComponentProps = {
+type GenerateReactComponent = {
+  targetFolderPath: string;
   componentName: string;
   namingConvention: StringFormatConvention;
-  withIndexFile: boolean;
-  targetFolderPath: string;
-  withProps: boolean;
+  options: ReactComponentOptions;
 };
 
 /**
  * Generates React component files with specified configuration
  * @async
- * @param {generateReactComponentProps} props - Configuration options for the component generation
+ * @param {GenerateReactComponent} props - Configuration options for the component generation
  * @returns {Promise<void>}
  * @throws {Error} When file creation fails
  */
 export async function generateReactComponentFiles({
   componentName,
   namingConvention,
-  withIndexFile,
   targetFolderPath,
-  withProps,
-}: generateReactComponentProps): Promise<void> {
+  options,
+}: GenerateReactComponent): Promise<void> {
   try {
     // Convert component name to specified naming convention
     const compNewName = changeStringConvention(componentName, namingConvention);
     const componentFileName = `${compNewName}.tsx`;
 
     // Generate component template and format it
-    const template = await basicReactCompTemplate(componentName, {
-      withProps,
-    });
+    const template = await basicReactCompTemplate(componentName, options);
     const compFormattedTemplate = await generateFormattedCode(template);
 
-    if (withIndexFile) {
+    if (options.withIndexFile) {
       // Create component in its own directory with index file
       const componentFolderPath = path.join(targetFolderPath, compNewName);
-      const indexFileContent = await indexFileFormattedTemplate(compNewName);
+      const indexFileContent = await indexFileTemplate(compNewName);
 
       await createFile(componentFolderPath, indexFileName, indexFileContent);
       await createFile(

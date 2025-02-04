@@ -1,7 +1,10 @@
 import * as vscode from "vscode";
-import { setupNextComponent, setupNextPage } from "./utils/next-component";
-import { setupReactComponent } from "./utils/react-component";
-import { setupRemixComponent, setupRemixRoute } from "./utils/remix-component";
+import { setupNextComponent, setupNextPage } from "./generators/next-component";
+import { setupReactComponent } from "./generators/react-component";
+import {
+  setupRemixComponent,
+  setupRemixRoute,
+} from "./generators/remix-component";
 
 export function activate(context: vscode.ExtensionContext) {
   setupReactComponent(context);

@@ -1,23 +1,18 @@
-import { changeStringConvention, generateFormattedCode } from "../../utils";
+import { changeStringConvention, generateFormattedCode } from "../../../utils";
+import { RemixComponentsOptions } from "../types";
 
 export async function remixLoaderComponent(
   componentName: string,
-  options = {
-    withProps: false,
-    route: false,
-  }
+  options: Partial<RemixComponentsOptions>
 ) {
   const pascalCasedCompName = changeStringConvention(
     componentName,
     "pascal-case"
   );
-  const titleCasedCompName = changeStringConvention(
-    componentName,
-    "title-case"
-  );
+  const defaultExportName = options.exportAsDefault ? "default" : "";
 
   const template = `
-    import { json, LoaderFunctionArgs${options.route ? ", MetaFunction" : ""} } from "@remix-run/node";
+    import { json, LoaderFunctionArgs } from "@remix-run/node";
     import { useLoaderData } from "@remix-run/react";
 
 		${
@@ -34,7 +29,7 @@ export async function remixLoaderComponent(
 			});
 		}
 
-		export default function ${pascalCasedCompName}(${options.withProps ? `props: ${pascalCasedCompName}Props` : ""}) {
+		export ${defaultExportName} function ${pascalCasedCompName}(${options.withProps ? `props: ${pascalCasedCompName}Props` : ""}) {
 			const data = useLoaderData<typeof loader>();
 
 			return (
@@ -43,22 +38,6 @@ export async function remixLoaderComponent(
 				</div>
 			);
 		};
-
-		${
-      options.route
-        ? `
-					export const meta: MetaFunction = () => {
-					return [
-						{ title: "${titleCasedCompName}" },
-						{
-							name: "description",
-							content: "This is ${titleCasedCompName} page",
-						},
-					];
-				};
-			`
-        : ""
-    }
 	`;
 
   const formattedTemplate = await generateFormattedCode(template);

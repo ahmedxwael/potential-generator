@@ -3,36 +3,47 @@
  */
 import * as vscode from "vscode";
 import { GENERATE_REMIX_COMPONENT } from "../../commands";
-import { StringFormatConvention } from "../changeStringFormat";
-import { determineFolderPath, getFileOrFolderName } from "../files-and-folders";
-import { getComponentConfig, QuickPickOption } from "../getComponentConfig";
+import {
+  changeStringConvention,
+  getComponentNamingConvention,
+  getComponentPreferences,
+  isFilesOrFoldersExists,
+  QuickPickOption,
+} from "../../utils";
+import {
+  determineFolderPath,
+  getFileOrFolderName,
+} from "../../utils/files-and-folders";
 import { generateRemixComponent } from "./generateRemixComponent";
-
-/**
- * Configuration options for Remix component generation.
- */
-type RemixComponentPreferences = {
-  namingConvention: StringFormatConvention;
-  withIndexFile: boolean;
-  withProps: boolean;
-  withLoader: boolean;
-};
 
 /**
  * List of available preferences for Remix component generation.
  */
-const remixPrefList: QuickPickOption[] = [
+const preferencesList: QuickPickOption[] = [
   {
     label: "withProps",
-    description: "Generate a Remix component with props.",
+    description: "Generate a Remix Component With Props.",
+    picked: true,
   },
   {
     label: "withLoader",
-    description: "Generate a Remix component with a loader function.",
+    description: "Generate a Remix Component With Loader Function.",
+    picked: false,
+  },
+  {
+    label: "withState",
+    description: "Generate a Remix Component With State.",
+    picked: false,
+  },
+  {
+    label: "exportAsDefault",
+    description: "Export the Remix Component As Default.",
+    picked: false,
   },
   {
     label: "withIndexFile",
-    description: "Generate an index file for the Remix component.",
+    description: "Generate An Index File For The Remix Component.",
+    picked: false,
   },
 ];
 
@@ -66,19 +77,34 @@ export function setupRemixComponent(context: vscode.ExtensionContext) {
         return;
       }
 
-      // Get component configuration preferences
-      const remixCompConfig =
-        await getComponentConfig<RemixComponentPreferences>(remixPrefList);
-      if (!remixCompConfig) {
-        vscode.window.showErrorMessage("No preferences selected.");
+      // Get the user's component configuration settings
+      const namingConvention = await getComponentNamingConvention();
+      if (!namingConvention) {
+        vscode.window.showErrorMessage("No naming convention selected.");
         return;
+      }
+
+      // Check if the folder or file already exists
+      const exists = isFilesOrFoldersExists(
+        targetFolderPath,
+        changeStringConvention(componentName, namingConvention)
+      );
+      if (exists) {
+        return;
+      }
+
+      const preferencesObject = await getComponentPreferences(preferencesList);
+      if (!preferencesObject) {
+        vscode.window.showErrorMessage("No Preferences Selected.");
+        return; // Added missing return statement
       }
 
       // Generate the component with collected configuration
       await generateRemixComponent({
         componentName,
         targetFolderPath,
-        ...remixCompConfig,
+        namingConvention,
+        options: preferencesObject,
       });
 
       // Show a success message to the user

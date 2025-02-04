@@ -4,31 +4,37 @@
 
 import * as vscode from "vscode";
 import { GENERATE_REMIX_ROUTE } from "../../commands";
-import { StringFormatConvention } from "../changeStringFormat";
-import { determineFolderPath, getFileOrFolderName } from "../files-and-folders";
-import { getComponentConfig } from "../getComponentConfig";
+import {
+  changeStringConvention,
+  getComponentNamingConvention,
+  getComponentPreferences,
+  isFilesOrFoldersExists,
+  QuickPickOption,
+} from "../../utils";
+import {
+  determineFolderPath,
+  getFileOrFolderName,
+} from "../../utils/files-and-folders";
 import { generateRemixComponent } from "./generateRemixComponent";
-
-/**
- * Type definition for Remix route generation preferences
- */
-type RemixRoutePreferences = {
-  withProps: boolean;
-  withLoader: boolean;
-  namingConvention: StringFormatConvention;
-};
 
 /**
  * List of available preferences for Remix route generation
  */
-const routePrefList = [
+
+// TODO: Add dynamic route generation
+const preferencesList: QuickPickOption[] = [
   {
     label: "withProps",
-    description: "Generate a Remix route with props.",
+    description: "Generate Remix Route With Props.",
+    picked: true,
   },
   {
     label: "withLoader",
-    description: "Generate a Remix route with a loader function.",
+    description: "Generate Remix Route With Loader Function.",
+  },
+  {
+    label: "inFolder",
+    description: "Generate The Remix Route In A Folder.",
   },
 ];
 
@@ -56,20 +62,37 @@ export async function setupRemixRoute(context: vscode.ExtensionContext) {
         return;
       }
 
-      // Get user preferences for route generation
-      const remixCompConfig =
-        await getComponentConfig<RemixRoutePreferences>(routePrefList);
-      if (!remixCompConfig) {
-        vscode.window.showErrorMessage("No preferences selected.");
+      // Get the user's component configuration settings
+      const namingConvention = await getComponentNamingConvention();
+      if (!namingConvention) {
+        vscode.window.showErrorMessage("No naming convention selected.");
         return;
+      }
+
+      // Check if the folder or file already exists
+      const exists = isFilesOrFoldersExists(
+        targetFolderPath,
+        changeStringConvention(componentName, namingConvention)
+      );
+      if (exists) {
+        return;
+      }
+
+      const preferencesObject = await getComponentPreferences(preferencesList);
+      if (!preferencesObject) {
+        vscode.window.showErrorMessage("No Preferences Selected.");
+        return; // Added missing return statement
       }
 
       // Generate the Remix route component
       await generateRemixComponent({
         componentName,
         targetFolderPath,
-        route: true,
-        ...remixCompConfig,
+        namingConvention,
+        options: {
+          remixRoute: true,
+          ...preferencesObject,
+        },
       });
 
       // Show a success message to the user

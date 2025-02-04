@@ -106,7 +106,7 @@ export async function getComponentNamingConvention(): Promise<
  */
 export async function getComponentPreferences<T extends QuickPickOption>(
   prefOptions: T[]
-): Promise<Record<string, boolean> | undefined> {
+): Promise<any | undefined> {
   const selectedOptions = (await showQuickPick(
     prefOptions,
     "Select additional options for your component",
@@ -119,12 +119,12 @@ export async function getComponentPreferences<T extends QuickPickOption>(
 
   return prefOptions.reduce(
     (acc, option) => {
-      acc[option.label] = selectedOptions.some(
+      acc[option.label as T["label"]] = selectedOptions.some(
         (selected) => selected.label === option.label
       );
       return acc;
     },
-    {} as Record<string, boolean>
+    {} as Record<T["label"], boolean>
   );
 }
 
@@ -145,7 +145,7 @@ export async function getComponentConfig<T>(
 
   const preferences = await getComponentPreferences(preOptions);
   if (!preferences) {
-    vscode.window.showErrorMessage("No preferences selected.");
+    vscode.window.showErrorMessage("No Preferences Selected.");
     return; // Added missing return statement
   }
 
